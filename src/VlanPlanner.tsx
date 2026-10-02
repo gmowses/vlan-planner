@@ -1,5 +1,6 @@
 import { useState, useEffect, useId } from 'react'
 import { Plus, Trash2, Download, Sun, Moon, Languages, Network, AlertTriangle } from 'lucide-react'
+import { vlanCsv } from './csv'
 
 const translations = {
   en: {
@@ -104,9 +105,7 @@ export default function VlanPlanner() {
   const isReserved = (vlanId: string) => RESERVED.has(Number(vlanId))
 
   const exportCsv = () => {
-    const header = 'VLAN ID,Name,Subnet,Description\n'
-    const rows = vlans.map(v => `${v.vlanId},${v.name},${v.subnet},${v.description}`).join('\n')
-    const blob = new Blob([header + rows], { type: 'text/csv' })
+    const blob = new Blob([vlanCsv(vlans)], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url; a.download = 'vlans.csv'; a.click()
